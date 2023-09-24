@@ -24,7 +24,7 @@ const buttonsList = useSelector((s)=> s.buttonList );
     <!-- buttons -->
     <div :class="styles.buttons">
       <div v-for="( isActive, index ) in buttonsList" :class="isActive?styles.active:''" :key="index" >
-        <Button text="вызвать лифт" 
+        <Button :text="`вызвать лифт на этаж ${index+1}`" 
           :on-click="()=>CallLift(index+1)" 
           :background-color="isActive?'#faf59d':''"
         ></Button>
