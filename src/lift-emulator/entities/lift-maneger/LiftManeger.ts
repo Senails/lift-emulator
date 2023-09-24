@@ -18,7 +18,7 @@ export class LiftManeger{
         });
     }
     public CallLift(level: number){
-        if (this.LiftsList.find((lift)=>lift.Position === level)) return;
+        if (this.LiftsList.find((lift)=>lift.Status==="wait" && lift.Position === level)) return;
         if (this.LiftsList.find((lift)=>lift.Targets.includes(level))) return;
 
         const distanceToLevel: number[] = this.LiftsList.map((lift)=>lift.FindDistansToLevel(level));
