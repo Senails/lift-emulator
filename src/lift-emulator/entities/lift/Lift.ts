@@ -44,6 +44,10 @@ export class Lift{
     }
 
     private Moving(): void{
+        if (this.Targets.length === 0){
+            this.Status = "sleep";
+            return this.onChangeState?.();
+        }
         if (this.Status === "sleep"){
             this.Status = "moving";
             this.Direction = this.Targets[0]>this.Position?"up":"down";
@@ -62,15 +66,9 @@ export class Lift{
             return this.Moving.call(this);
         } 
 
-        let nextTarget = this.FindNextTarget();
-        if (!nextTarget) {
-            this.Direction = this.Direction=="up"?"down":"up";
-            nextTarget = this.FindNextTarget();
-        }
-        if (!nextTarget) {
-            this.Status = "sleep";
-            return this.onChangeState?.();
-        };
+        const nextTarget = this.Targets[0];
+        if (nextTarget>this.Position) this.Direction = "up";
+        if (nextTarget<this.Position) this.Direction = "down";
 
         if (this.Direction === "up"){
             this.Position += 1/(1000/60)*this._config.speedLift;
@@ -92,11 +90,5 @@ export class Lift{
         }
 
         this.onChangeState?.();
-    }
-    private FindNextTarget(){
-        if (this.Direction === "up"){
-            return this.Targets.find((level)=>level > this.Position);
-        }
-        return this.Targets.find((level)=>level < this.Position);
     }
 }

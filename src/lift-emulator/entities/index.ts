@@ -4,16 +4,19 @@ import type { LiftConfig, LiftState } from "./types";
 import { createTrotling } from "@/shared/utils/createTrotling";
 
 const storageKey= "liftStateStorageKey";
-const prevSessionState = loadState();
+let prevSessionState = loadState();
 
 
 const liftConfig: LiftConfig = {
     liftCount: 3,
 
-    levelCount: 6,
+    levelCount: 5,
     speedLift: 0.5,
     waitTime: 2,
 }
+
+if (prevSessionState?.liftStateList.length!==liftConfig.liftCount) prevSessionState = undefined;
+if (prevSessionState?.buttonList.length!==liftConfig.levelCount) prevSessionState = undefined;
 
 
 export const liftManeger = new LiftManeger( liftConfig, prevSessionState?.liftStateList );
