@@ -1,17 +1,17 @@
 import type { LiftConfig } from "../types";
-import type { Direction, LiftState, LiftStatus } from "./types";
+import type { Direction, OneLiftState, LiftStatus } from "../types";
 
 
 export class Lift{
     private _config: LiftConfig;
 
     public Position: number = 1;
-    public Direction: Direction = "none";
+    public Direction: Direction = "up";
     public Status: LiftStatus = "sleep";
     public Targets: number[] = [];
     public onChangeState?: ()=>void;
 
-    public get state(): LiftState{
+    public get state(): OneLiftState{
         return {
             Position: this.Position,
             Direction: this.Direction,
@@ -21,22 +21,82 @@ export class Lift{
     }
 
 
-    public constructor(config: LiftConfig, initState?: LiftState){
+    public constructor(config: LiftConfig, initState?: OneLiftState){
         this._config = config;
         if (!initState) return;
         Object.assign( this, initState );
-        console.log(this);
         if (this.Status !== "sleep") this.Moving();
     }
     public CallLift(level: number){
-
-        console.log(level);
+        this.Targets.push(level);
+        if (this.Status === "sleep") this.Moving();
     }
     public FindDistansToLevel(level: number): number{
-        return 1;
+        if (this.Targets.length === 0) return Math.abs(level-this.Position);
+
+        const distance = this.Targets.reduce(( accum, value, index)=>{
+            if (index === 0) return Math.abs(value-this.Position);
+            return accum + Math.abs(value - this.Targets[index-1]);
+        },0);
+        const waitTime = this._config.waitTime*this.Targets.length;
+
+        return distance + waitTime + Math.abs(this.Targets[this.Targets.length-1]- level);
     }
 
-    private Moving(){
+    private Moving(): void{
+        if (this.Status === "sleep"){
+            this.Status = "moving";
+            this.Direction = this.Targets[0]>this.Position?"up":"down";
+        } 
+        if (this.Status === "wait"){
+            const target = this.Targets.find((l)=> l === this.Position);
+            if (target){
+                setTimeout(()=>{
+                    this.Targets = this.Targets.filter((l)=> !(l === target));
+                    this.Status = "moving";
+                    this.Moving.call(this);
+                }, this._config.waitTime*1000);
+                return;
+            }
+            this.Status = "moving";
+            return this.Moving.call(this);
+        } 
 
+        let nextTarget = this.FindNextTarget();
+        if (!nextTarget) {
+            this.Direction = this.Direction=="up"?"down":"up";
+            nextTarget = this.FindNextTarget();
+        }
+        if (!nextTarget) {
+            this.Status = "sleep";
+            return this.onChangeState?.();
+        };
+
+        if (this.Direction === "up"){
+            this.Position += 1/(1000/60)*this._config.speedLift;
+            if (this.Position > nextTarget) this.Position = nextTarget;
+        }else{
+            this.Position -= 1/(1000/60)*this._config.speedLift;
+            if (this.Position < nextTarget) this.Position = nextTarget;
+        }
+
+        if (this.Position === nextTarget){
+            this.Status = "wait";
+            setTimeout(()=>{
+                this.Targets = this.Targets.filter((l)=> !(l === nextTarget));
+                this.Status = "moving";
+                this.Moving.call(this);
+            }, this._config.waitTime*1000);
+        }else{
+            setTimeout(()=> this.Moving.call(this), Math.floor(1000/60));
+        }
+
+        this.onChangeState?.();
+    }
+    private FindNextTarget(){
+        if (this.Direction === "up"){
+            return this.Targets.find((level)=>level > this.Position);
+        }
+        return this.Targets.find((level)=>level < this.Position);
     }
 }

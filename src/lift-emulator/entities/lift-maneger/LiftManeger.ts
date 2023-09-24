@@ -1,6 +1,6 @@
 import { createTrotling } from "@/shared/utils/createTrotling";
 import { Lift } from "../lift/Lift";
-import type { LiftState } from "../lift/types";
+import type { OneLiftState } from "../types";
 import type { LiftConfig } from "../types";
 
 export class LiftManeger{
@@ -10,7 +10,7 @@ export class LiftManeger{
     public OnChangeState?: ()=>void;
 
 
-    public constructor( config: LiftConfig, initState?: (LiftState|undefined)[]){
+    public constructor( config: LiftConfig, initState?: (OneLiftState|undefined)[]){
         this.LiftsList = Array( initState?.length || config.liftCount ).fill(null).map((_,i)=>{
             const lift = new Lift(config, initState?.[i]);
             lift.onChangeState = this.OnChageLiftState.bind(this);

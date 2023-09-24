@@ -14,7 +14,7 @@ const {text, onClick, backgroundColor, color} = defineProps<TPropsType>()
 
 <template>
     <span :class="style.Button+` noselect`" 
-    :style="{backgroundColor, color}"
+    :style="{ backgroundColor , color}"
     @click="onClick">
         {{text}}
     </span>
