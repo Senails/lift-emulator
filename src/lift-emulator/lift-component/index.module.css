@@ -1,0 +1,22 @@
+.liftTonnel{
+    position: relative;
+    width: 100px;
+
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.liftBox{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+
+    background-color: rgba(224, 231, 95, 0.7);
+
+    padding: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

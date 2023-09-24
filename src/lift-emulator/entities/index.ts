@@ -1,24 +1,22 @@
 import { createEasyStore } from "easy-state-maneger-vue";
 import { LiftManeger } from "./lift-maneger/LiftManeger";
-import type { LiftParamsType } from "./lift/types";
+import type { LiftConfig } from "./types";
 
 
-// default values
-export const LiftParams: LiftParamsType = {
+const liftConfig: LiftConfig = {
+    liftCount: 5,
+
     levelCount: 5,
     speedLift: 0.25,
     waitTime: 3,
 }
-export const dafaultLiftCount = 5;
-
 
 // entitis
-export const liftManeger = new LiftManeger(Array(dafaultLiftCount).fill(undefined));
+export const liftManeger = new LiftManeger(liftConfig);
 const initState = {
-    buttonList: Array(LiftParams.levelCount).fill(false),
+    buttonList: Array(liftConfig.levelCount).fill(false) as boolean[],
     liftStateList: liftManeger.LiftsList.map( (l)=>l.state ),
 }
-
 
 export const { useSelector, updateStore, getStore } = createEasyStore(initState);
 
@@ -34,7 +32,6 @@ liftManeger.OnChangeState = ()=>{
 };
 
 // actions 
-
 export function CallLift(level: number){
     const calledLift = getStore().liftStateList.find((l)=> l.Targets.includes(level));
     if (calledLift) return;

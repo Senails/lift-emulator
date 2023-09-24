@@ -1,0 +1,36 @@
+.conteiner{
+    display: flex;
+    flex-direction: row;
+
+    margin: 0 auto;
+    padding-left: 10px;
+}
+
+.conteiner > * {
+    margin-right: 10px;
+}
+
+.buttons{
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-around;
+}
+
+.buttons > div.active{
+    animation-name: flashing;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+@keyframes flashing {
+	0%{
+		opacity: 0.5;
+	}
+	50%{
+		opacity: 1;
+	}
+    100%{
+		opacity: 0.5;
+	}
+}

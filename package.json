@@ -13,7 +13,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "easy-state-maneger-vue": "^1.0.1",
+    "easy-state-maneger-vue": "^1.0.4",
     "vue": "^3.3.4"
   },
   "devDependencies": {

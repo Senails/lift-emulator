@@ -1,0 +1,15 @@
+.mainConteiner{
+    width: 100vw;
+    height: 100vh;
+    background-color: #26282a;
+
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.mainConteiner > div{
+    display: flex;
+}

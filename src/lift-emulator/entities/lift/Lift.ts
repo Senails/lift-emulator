@@ -1,12 +1,9 @@
-
-import { LiftParams } from "..";
+import type { LiftConfig } from "../types";
 import type { Direction, LiftState, LiftStatus } from "./types";
 
 
 export class Lift{
-    private static _levelCount: number = LiftParams.levelCount;
-    private static _waitTime: number = LiftParams.waitTime;
-    private static _mySpeed: number = LiftParams.speedLift;
+    private _config: LiftConfig;
 
     public Position: number = 1;
     public Direction: Direction = "none";
@@ -24,9 +21,11 @@ export class Lift{
     }
 
 
-    public constructor(initState?: LiftState){
+    public constructor(config: LiftConfig, initState?: LiftState){
+        this._config = config;
         if (!initState) return;
         Object.assign( this, initState );
+        console.log(this);
         if (this.Status !== "sleep") this.Moving();
     }
     public CallLift(level: number){
