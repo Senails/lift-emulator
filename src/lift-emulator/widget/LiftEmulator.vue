@@ -3,7 +3,6 @@ import styles from './index.module.css';
 import LiftComponent from "../lift-component/LiftComponent.vue";
 import Button from "../../shared/components/Button/Button.vue";
 import { CallLift, useSelector } from '../entities/index';
-import { computed } from 'vue';
 
 const liftStates = useSelector((s)=>s.liftStateList);
 const levelCount = useSelector((s)=>s.buttonList.length);

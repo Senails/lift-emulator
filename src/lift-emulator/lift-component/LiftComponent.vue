@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { LiftState } from '../entities/types';
+import type { OneLiftState } from '../entities/types';
 import styles from './index.module.css';
 import { computed } from 'vue';
 
 
 type TPropsType = {
   levelCount: number
-  liftState: LiftState
+  liftState: OneLiftState
 }
 
 const props = defineProps<TPropsType>();
