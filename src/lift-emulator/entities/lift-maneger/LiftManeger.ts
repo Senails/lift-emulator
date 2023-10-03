@@ -4,7 +4,7 @@ import type { OneLiftState } from "../types";
 import type { LiftConfig } from "../types";
 
 export class LiftManeger{
-    private _trotling: (call: ()=>void)=>void = createTrotling(Math.floor(1000/30));
+    private _trotling: (call: ()=>void)=>void = createTrotling(Math.floor(1000/60));
 
     public LiftsList: Lift[];
     public OnChangeState?: ()=>void;
